@@ -15,11 +15,12 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  create_release:
     runs-on: ubuntu-latest
-
+    name: Create a release in Octopus
+    permissions:
+      id-token: write # This is required to obtain the ID token from GitHub Actions
+      contents: read # For example: this is required to check out code, remove if not needed
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
