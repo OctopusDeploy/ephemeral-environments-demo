@@ -30,3 +30,9 @@ jobs:
         with: 
           server: https://team-github.testoctopus.app
           service_account_id: e310374a-0a86-4bd4-96ff-010fe8de3f4f
+
+      - name: Create Octopus Deploy Release
+        uses: OctopusDeploy/create-release-action@v3
+        with:
+          project: Demo
+          space: Ephemeral Demo
