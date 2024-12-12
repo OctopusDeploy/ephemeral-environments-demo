@@ -37,3 +37,5 @@ jobs:
         with:
           project: Demo
           space: Default
+          git_ref: ${{ github.head_ref || github.ref }}
+          git_commit: ${{ github.event.pull_request.head.sha || github.sha }}
