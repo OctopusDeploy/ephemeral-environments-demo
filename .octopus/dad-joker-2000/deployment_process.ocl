@@ -1,0 +1,55 @@
+step "run-an-azure-script" {
+    name = "Run an Azure Script"
+
+    action {
+        action_type = "Octopus.AzurePowerShell"
+        properties = {
+            Octopus.Action.Azure.AccountId = "#{Octopus.Azure.Account}"
+            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $envName=$OctopusParameters["Octopus.Environment.Name"]
+                
+                az webapp create --name ephemeral-environments-$envName --resource-group ephemeral-environments --deployment-container-image-name ephemeralenvironments.azurecr.io/octopusdeploytesting/ephemeral-environments-demo --plan ephemeral-environments-service-plan --tags octopus-environment=$envName octopus-role=ephemeral-environments
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool_variable = ""
+
+        container {
+            feed = "docker-hub"
+            image = "octopusdeploy/worker-tools:6.0.0-ubuntu.22.04"
+        }
+    }
+}
+
+step "deploy-an-azure-app-service" {
+    name = "Deploy an Azure App Service"
+    properties = {
+        Octopus.Action.TargetRoles = "ephemeral-environments"
+    }
+
+    action {
+        action_type = "Octopus.AzureAppService"
+        properties = {
+            Octopus.Action.Azure.DeploymentType = "Container"
+            Octopus.Action.EnabledFeatures = "Octopus.Features.JsonConfigurationVariables,Octopus.Features.ConfigurationTransforms,Octopus.Features.SubstituteInFiles"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "ephemeral-environments"
+            Octopus.Action.Package.PackageId = "octopusdeploytesting/ephemeral-environments-demo"
+            Octopus.Action.RunOnServer = "true"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool_variable = ""
+
+        packages {
+            acquisition_location = "NotAcquired"
+            feed = "ephemeral-environments"
+            package_id = "octopusdeploytesting/ephemeral-environments-demo"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
