@@ -5,14 +5,10 @@ step "run-an-azure-script" {
         action_type = "Octopus.AzurePowerShell"
         properties = {
             Octopus.Action.Azure.AccountId = "#{Octopus.Azure.Account}"
+            Octopus.Action.GitRepository.Source = "Project"
             Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptBody = <<-EOT
-                $envName=$OctopusParameters["Octopus.Environment.Name"]
-                
-                az webapp create --name ephemeral-environments-$envName --resource-group ephemeral-environments --deployment-container-image-name ephemeralenvironments.azurecr.io/octopusdeploytesting/ephemeral-environments-demo --plan ephemeral-environments-service-plan --tags octopus-environment=$envName octopus-role=ephemeral-environments
-                EOT
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
+            Octopus.Action.Script.ScriptFileName = "./util/create_webapp.ps1"
+            Octopus.Action.Script.ScriptSource = "GitRepository"
             OctopusUseBundledTooling = "False"
         }
         worker_pool_variable = ""
