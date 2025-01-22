@@ -1,25 +1,3 @@
-step "run-an-azure-script" {
-    name = "Run an Azure Script"
-
-    action {
-        action_type = "Octopus.AzurePowerShell"
-        properties = {
-            Octopus.Action.Azure.AccountId = "#{Octopus.Azure.Account}"
-            Octopus.Action.GitRepository.Source = "Project"
-            Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptFileName = "./util/create_webapp.ps1"
-            Octopus.Action.Script.ScriptSource = "GitRepository"
-            OctopusUseBundledTooling = "False"
-        }
-        worker_pool_variable = ""
-
-        container {
-            feed = "docker-hub"
-            image = "octopusdeploy/worker-tools:6.0.0-ubuntu.22.04"
-        }
-    }
-}
-
 step "deploy-an-azure-app-service" {
     name = "Deploy an Azure App Service"
     properties = {
