@@ -4,7 +4,7 @@ Welcome to The Dad Joker 2000! This is a sample application that Team DevEx are 
 
 ## What does this thing do?
 
-This sample application tells you dad jokes using https://icanhazdadjoke.com, yes they are terrible 😄. It's built in Node using the [Remix framework](https://remix.run/).
+This sample application tells you dad jokes using https://icanhazdadjoke.com, yes they are terrible 😄. It's built in Node using the [Remix framework](https://remix.run/).!
 
 ## Getting started
 
