@@ -42,7 +42,7 @@ process {
             worker_pool = "hosted-ubuntu"
 
             container {
-                feed = "ephemeral-environments"
+                feed = "docker-hub"
                 image = "octopusdeploy/worker-tools:6.3.0-ubuntu.22.04"
             }
         }
