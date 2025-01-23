@@ -39,7 +39,7 @@ export default function Index() {
         <div className="flex flex-col items-center gap-8">
           <header>
             <h1 className="leading text-4xl font-bold text-gray-800 dark:text-gray-100">
-              Welcome to <span className="text-green-600">The Dad Joker 2000!</span>
+              Welcome to <span className="text-green-600">The Dad Joker 2000!!</span>
             </h1>
           </header>
           <p>{data.joke}</p>
