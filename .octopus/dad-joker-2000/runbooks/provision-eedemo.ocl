@@ -28,7 +28,7 @@ process {
                     az group create --location australiaEast --name $resourceGroupName
                     az appservice plan create -n $envName-plan -g $resourceGroupName --is-linux --sku B1
                         
-                    az webapp create --name $webappName --resource-group  $resourceGroupName --plan $envName-plan --tags octopus-environment=$envName octopus-role=ephemeral-environments octopus-project=$projectName --container-image-name nginx
+                    az webapp create --name $webappName --resource-group  $resourceGroupName --plan $envName-plan --tags octopus-environment=$envName octopus-role=ephemeral-environments octopus-project=$projectName ---deployment-container-image-name nginx
                     az resource wait --exists --name $webappName --resource-group $resourceGroupName --resource-type "microsoft.web/sites"
                     Write-Host "Web App created"
                     
