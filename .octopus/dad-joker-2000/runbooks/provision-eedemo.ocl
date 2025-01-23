@@ -18,7 +18,6 @@ process {
             action_type = "Octopus.AzurePowerShell"
             properties = {
                 Octopus.Action.Azure.AccountId = "ephemeral-environments-identity"
-                Octopus.Action.RunOnServer = "false"
                 Octopus.Action.Script.ScriptBody = <<-EOT
                     $envName=$OctopusParameters["Octopus.Environment.Name"]
                     $projectName=$OctopusParameters["Octopus.Project.Name"]
@@ -40,7 +39,12 @@ process {
                 Octopus.Action.Script.Syntax = "PowerShell"
                 OctopusUseBundledTooling = "False"
             }
-            worker_pool_variable = ""
+            worker_pool = "hosted-ubuntu"
+
+            container {
+                feed = "ephemeral-environments"
+                image = "octopusdeploy/worker-tools:6.3.0-ubuntu.22.04"
+            }
         }
     }
 }
