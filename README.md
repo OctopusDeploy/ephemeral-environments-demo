@@ -8,6 +8,7 @@ This sample application tells you dad jokes using https://icanhazdadjoke.com, ye
 
 ## Getting started
 
+
 To get started:
 
 - Create a _new_ repository using this one as a template.
