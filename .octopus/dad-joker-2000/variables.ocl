@@ -5,3 +5,7 @@ variable "Octopus.Azure.Account" {
         description = ""
     }
 }
+
+variable "ResourceGroup" {
+    value "EphemeralEnvironments" {}
+}
