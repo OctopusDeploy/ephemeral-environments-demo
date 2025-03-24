@@ -1,4 +1,4 @@
-name = "[PROVISION] EEDemo"
+name = "Provision Azure resources"
 default_guided_failure_mode = "EnvironmentDefault"
 description = ""
 
