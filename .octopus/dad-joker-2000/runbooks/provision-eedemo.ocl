@@ -33,7 +33,7 @@ process {
                     Write-Host "Web App created"
                     
                     $webAppHostname = az webapp show --name $webappName --resource-group $resourceGroupName --query "defaultHostName" -o tsv
-                    Write-Highlight "Web App created: https://$webAppHostname"
+                    Write-Highlight "[Test environment](https://$webAppHostname)"
                     EOT
                 Octopus.Action.Script.ScriptSource = "Inline"
                 Octopus.Action.Script.Syntax = "PowerShell"
