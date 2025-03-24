@@ -33,7 +33,7 @@ process {
                     Write-Host "Web App created"
                     
                     $webAppHostname = az webapp show --name $webappName --resource-group $resourceGroupName --query "defaultHostName" -o tsv
-                    $webAppUrl = -join "https://", $webAppUrl
+                    $webAppUrl = -join "https://", $webAppHostname
                     Write-Highlight "$webAppUrl"
                     EOT
                 Octopus.Action.Script.ScriptSource = "Inline"
