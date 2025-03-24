@@ -111,6 +111,7 @@ jobs:
         with:
           project: Dad Joker 2000
           space: Default
+          release_number: ${{ steps.get_version.outputs.version }}
           channel: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && 'Production' || 'Test environments' }}
           git_ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
           git_commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
