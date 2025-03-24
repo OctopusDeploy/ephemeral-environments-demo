@@ -23,7 +23,7 @@ process {
                     $resourceGroupName="EEDemo-$envName-rg"
                     
                     Write-Host "Deleting resource group: $resourceGroupName"
-                    az group delete --location australiaEast --name $resourceGroupName --yes
+                    az group delete --name $resourceGroupName --yes
                     EOT
                 Octopus.Action.Script.ScriptSource = "Inline"
                 Octopus.Action.Script.Syntax = "PowerShell"
