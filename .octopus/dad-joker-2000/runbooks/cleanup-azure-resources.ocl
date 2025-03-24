@@ -10,4 +10,26 @@ run_retention_policy {
     quantity_to_keep = 100
 }
 
-process {}
+process {
+    step "run-an-azure-script" {
+        name = "Run an Azure Script"
+
+        action {
+            action_type = "Octopus.AzurePowerShell"
+            properties = {
+                Octopus.Action.Azure.AccountId = "ephemeral-environments-identity"
+                Octopus.Action.Script.ScriptBody = <<-EOT
+                    $envName=$OctopusParameters["Octopus.Environment.Name"]
+                    $resourceGroupName="EEDemo-$envName-rg"
+                    
+                    Write-Host "Deleting resource group: $resourceGroupName"
+                    az group delete --location australiaEast --name $resourceGroupName --yes
+                    EOT
+                Octopus.Action.Script.ScriptSource = "Inline"
+                Octopus.Action.Script.Syntax = "PowerShell"
+                OctopusUseBundledTooling = "False"
+            }
+            worker_pool = "hosted-ubuntu"
+        }
+    }
+}
