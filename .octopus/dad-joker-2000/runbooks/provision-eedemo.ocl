@@ -32,8 +32,9 @@ process {
                     az resource wait --exists --name $webappName --resource-group $resourceGroupName --resource-type "microsoft.web/sites"
                     Write-Host "Web App created"
                     
-                    $webAppUrl = az webapp show --name $webappName --resource-group $resourceGroupName --query "defaultHostName" -o tsv
-                    Write-Host(-join("https://", $webAppUrl))
+                    $webAppHostname = az webapp show --name $webappName --resource-group $resourceGroupName --query "defaultHostName" -o tsv
+                    $webAppUrl = -join "https://", $webAppUrl
+                    Write-Highlight "$webAppUrl"
                     EOT
                 Octopus.Action.Script.ScriptSource = "Inline"
                 Octopus.Action.Script.Syntax = "PowerShell"
