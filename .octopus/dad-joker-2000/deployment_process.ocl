@@ -49,22 +49,45 @@ step "get-service-url-and-highlight" {
                     Write-Host "Waiting for LoadBalancer to be assigned an external IP..."
                     $externalIp = $null
                     
+                    # Set timeout parameters
+                    $maxWaitTimeMinutes = 10
+                    $startTime = Get-Date
+                    $timeout = $false
+                    
                     do {
                         $externalIp = kubectl get svc dad-joker-2000-service -n #{Kubernetes.Namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
                         
                         if (-not $externalIp) {
-                            Write-Host "External IP not yet assigned, waiting 10 seconds..."
+                            $currentTime = Get-Date
+                            $elapsedMinutes = ($currentTime - $startTime).TotalMinutes
+                            
+                            if ($elapsedMinutes -ge $maxWaitTimeMinutes) {
+                                $timeout = $true
+                                break
+                            }
+                            
+                            Write-Host "External IP not yet assigned, waiting 10 seconds... (Elapsed time: $([Math]::Round($elapsedMinutes, 1)) minutes)"
                             Start-Sleep -Seconds 10
                         }
                     } while (-not $externalIp)
                     
-                    # Set the URL
-                    $serviceUrl = "https://$externalIp"
-                    Write-Host "External IP assigned: $externalIp"
-                    Write-Host "Application URL: $serviceUrl"
-                    
-                    # Create the highlight with markdown for a clickable link
-                    Write-Highlight "Application is available at: [$serviceUrl]($serviceUrl)"
+                    if ($timeout) {
+                        Write-Warning "Timeout reached after $maxWaitTimeMinutes minutes. LoadBalancer IP was not assigned."
+                        Write-Warning "Please check your Kubernetes cluster configuration or service definition."
+                        Write-Highlight "⚠️ LoadBalancer timeout - Service might not be available yet"
+                        
+                        # Return a non-zero exit code to indicate failure (optional)
+                        # Uncomment the following line if you want the deployment step to fail
+                        exit 1
+                    } else {
+                        # Set the URL
+                        $serviceUrl = "http://$externalIp"
+                        Write-Host "External IP assigned: $externalIp"
+                        Write-Host "Application URL: $serviceUrl"
+                        
+                        # Create the highlight with markdown for a clickable link
+                        Write-Highlight "Application is available at: [$serviceUrl]($serviceUrl)"
+                    }
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
