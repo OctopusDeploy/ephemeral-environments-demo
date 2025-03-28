@@ -7,13 +7,13 @@ step "deploy-kubernetes-yaml" {
     action {
         action_type = "Octopus.KubernetesDeployRawYaml"
         properties = {
-            Octopus.Action.GitRepository.FilePathFilters = "deployment/manifests"
+            Octopus.Action.GitRepository.FilePathFilters = "deployment/manifests/*"
             Octopus.Action.GitRepository.Source = "Project"
             Octopus.Action.Kubernetes.DeploymentTimeout = "180"
             Octopus.Action.Kubernetes.ResourceStatusCheck = "True"
             Octopus.Action.Kubernetes.ServerSideApply.Enabled = "True"
             Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "True"
-            Octopus.Action.KubernetesContainers.CustomResourceYamlFileName = "deployment/manifests"
+            Octopus.Action.KubernetesContainers.CustomResourceYamlFileName = "deployment/manifests/*"
             Octopus.Action.KubernetesContainers.Namespace = "#{Kubernetes.Namespace}"
             Octopus.Action.RunOnServer = "false"
             Octopus.Action.Script.ScriptSource = "GitRepository"
