@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ephemeral-environments-demo
+  name: dad-joker-2000
   namespace: "#{Kubernetes.Namespace}"
   labels:
-    app: ephemeral-environments-demo
+    app: dad-joker-2000
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ephemeral-environments-demo
+      app: dad-joker-2000
   template:
     metadata:
       labels:
-        app: ephemeral-environments-demo
+        app: dad-joker-2000
     spec:
       containers:
         - name: ephemeral-environments-container
