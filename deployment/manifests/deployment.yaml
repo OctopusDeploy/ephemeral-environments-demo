@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: ephemeral-environments-container
-          image: ephemeralenvironments.azurecr.io/octopusdeploytesting/ephemeral-environments-demo:#{Octopus.Action.Package.PackageVersion}
+          image: ephemeralenvironments.azurecr.io/octopusdeploytesting/ephemeral-environments-demo:#{Octopus.Action.Package[ephemeral-environments-demo].PackageVersion}
           ports:
             - containerPort: 3000
           resources:
