@@ -1,33 +1,3 @@
-step "deploy-an-azure-app-service" {
-    name = "Deploy an Azure App Service"
-    properties = {
-        Octopus.Action.TargetRoles = "ephemeral-environments"
-    }
-
-    action {
-        action_type = "Octopus.AzureAppService"
-        properties = {
-            Octopus.Action.Azure.DeploymentType = "Container"
-            Octopus.Action.EnabledFeatures = "Octopus.Features.JsonConfigurationVariables,Octopus.Features.ConfigurationTransforms,Octopus.Features.SubstituteInFiles"
-            Octopus.Action.Package.DownloadOnTentacle = "False"
-            Octopus.Action.Package.FeedId = "ephemeral-environments"
-            Octopus.Action.Package.PackageId = "octopusdeploytesting/ephemeral-environments-demo"
-            Octopus.Action.RunOnServer = "true"
-            OctopusUseBundledTooling = "False"
-        }
-        worker_pool_variable = ""
-
-        packages {
-            acquisition_location = "NotAcquired"
-            feed = "ephemeral-environments"
-            package_id = "octopusdeploytesting/ephemeral-environments-demo"
-            properties = {
-                SelectionMode = "immediate"
-            }
-        }
-    }
-}
-
 step "deploy-kubernetes-yaml" {
     name = "Deploy Kubernetes YAML"
     properties = {
@@ -45,6 +15,7 @@ step "deploy-kubernetes-yaml" {
             Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "True"
             Octopus.Action.KubernetesContainers.CustomResourceYamlFileName = "deployment/manifests"
             Octopus.Action.KubernetesContainers.Namespace = "#{Kubernetes.Namespace}"
+            Octopus.Action.RunOnServer = "false"
             Octopus.Action.Script.ScriptSource = "GitRepository"
         }
         worker_pool_variable = ""
