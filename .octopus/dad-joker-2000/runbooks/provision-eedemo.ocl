@@ -18,23 +18,7 @@ process {
             action_type = "Octopus.AzurePowerShell"
             properties = {
                 Octopus.Action.Azure.AccountId = "ephemeral-environments-identity"
-                Octopus.Action.Script.ScriptBody = <<-EOT
-                    $envName=$OctopusParameters["Octopus.Environment.Name"]
-                    $projectName=$OctopusParameters["Octopus.Project.Name"]
-                    $resourceGroupName="EEDemo-$envName-rg"
-                    $webappName="EEDemo-$envName-webapp"
-                    
-                    Write-Host "Creating Web App"
-                    az group create --location australiaEast --name $resourceGroupName
-                    az appservice plan create -n $envName-plan -g $resourceGroupName --is-linux --sku B1
-                        
-                    az webapp create --name $webappName --resource-group  $resourceGroupName --plan $envName-plan --tags octopus-environment=$envName octopus-role=ephemeral-environments octopus-project=$projectName --deployment-container-image-name nginx
-                    az resource wait --exists --name $webappName --resource-group $resourceGroupName --resource-type "microsoft.web/sites"
-                    Write-Host "Web App created"
-                    
-                    $webAppHostname = az webapp show --name $webappName --resource-group $resourceGroupName --query "defaultHostName" -o tsv
-                    Write-Highlight "[Test environment](https://$webAppHostname)"
-                    EOT
+                Octopus.Action.Script.ScriptBody = "echo \"Nothing to do for k8s deployment, the namespace is created during deployment\""
                 Octopus.Action.Script.ScriptSource = "Inline"
                 Octopus.Action.Script.Syntax = "PowerShell"
                 OctopusUseBundledTooling = "False"
