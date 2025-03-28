@@ -1,0 +1,30 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ephemeral-environments-demo
+  namespace: "#{Kubernetes.Namespace}"
+  labels:
+    app: ephemeral-environments-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ephemeral-environments-demo
+  template:
+    metadata:
+      labels:
+        app: ephemeral-environments-demo
+    spec:
+      containers:
+        - name: ephemeral-environments-container
+          image: teamdevextesting.azurecr.io/octopusdeploytesting/ephemeral-environments-demo:#{Octopus.Action.Package.PackageVersion}
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
