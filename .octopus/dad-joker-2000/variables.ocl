@@ -9,3 +9,7 @@ variable "Octopus.Azure.Account" {
 variable "ResourceGroup" {
     value "EphemeralEnvironments" {}
 }
+
+variable "Kubernetes.Namespace" {
+    value "ee-demo-#{Octopus.Environment.Name | ToLower | Replace '/' '-' | Substring 10}" {}
+}
