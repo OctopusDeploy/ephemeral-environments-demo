@@ -1,4 +1,4 @@
-name = "Cleanup Azure resources"
+name = "Cleanup environment"
 default_guided_failure_mode = "EnvironmentDefault"
 description = ""
 
