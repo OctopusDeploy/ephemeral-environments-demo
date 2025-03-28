@@ -34,7 +34,7 @@ step "deploy-kubernetes-yaml" {
 }
 
 step "get-service-url-and-highlight" {
-    name = "Get Service URL and Create Highlight"
+    name = "Log application URL"
     properties = {
         Octopus.Action.TargetRoles = "k8s"
     }
@@ -58,7 +58,7 @@ step "get-service-url-and-highlight" {
                 } while (-not $externalIp)
                 
                 # Set the URL
-                $serviceUrl = "http://$externalIp"
+                $serviceUrl = "https://$externalIp"
                 Write-Host "External IP assigned: $externalIp"
                 Write-Host "Application URL: $serviceUrl"
                 
