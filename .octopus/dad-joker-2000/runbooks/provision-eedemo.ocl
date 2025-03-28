@@ -1,4 +1,4 @@
-name = "Provision Azure resources"
+name = "Provision environment"
 default_guided_failure_mode = "EnvironmentDefault"
 description = ""
 
