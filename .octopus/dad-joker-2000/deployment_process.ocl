@@ -19,5 +19,16 @@ step "deploy-kubernetes-yaml" {
             Octopus.Action.Script.ScriptSource = "GitRepository"
         }
         worker_pool_variable = ""
+
+        packages "ephemeral-environments-demo" {
+            acquisition_location = "NotAcquired"
+            feed = "ephemeral-environments"
+            package_id = "octopusdeploytesting/ephemeral-environments-demo"
+            properties = {
+                Extract = "False"
+                Purpose = "DockerImageReference"
+                SelectionMode = "immediate"
+            }
+        }
     }
 }
