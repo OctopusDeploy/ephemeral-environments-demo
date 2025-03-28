@@ -11,27 +11,6 @@ run_retention_policy {
 }
 
 process {
-    step "run-an-azure-script" {
-        name = "Run an Azure Script"
-
-        action {
-            action_type = "Octopus.AzurePowerShell"
-            properties = {
-                Octopus.Action.Azure.AccountId = "ephemeral-environments-identity"
-                Octopus.Action.Script.ScriptBody = "echo \"Nothing to do for k8s deployment, the namespace is created during deployment\""
-                Octopus.Action.Script.ScriptSource = "Inline"
-                Octopus.Action.Script.Syntax = "PowerShell"
-                OctopusUseBundledTooling = "False"
-            }
-            worker_pool = "hosted-ubuntu"
-
-            container {
-                feed = "docker-hub"
-                image = "octopusdeploy/worker-tools:6.3.0-ubuntu.22.04"
-            }
-        }
-    }
-
     step "run-a-kubectl-script" {
         name = "Run a kubectl script"
         properties = {
@@ -41,6 +20,7 @@ process {
         action {
             action_type = "Octopus.KubernetesRunScript"
             properties = {
+                Octopus.Action.RunOnServer = "false"
                 Octopus.Action.Script.ScriptBody = "kubectl create namespace $OctopusParameters[\"Kubernetes.Namespace\"]"
                 Octopus.Action.Script.ScriptSource = "Inline"
                 Octopus.Action.Script.Syntax = "PowerShell"
