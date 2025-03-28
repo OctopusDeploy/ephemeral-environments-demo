@@ -11,5 +11,5 @@ variable "ResourceGroup" {
 }
 
 variable "Kubernetes.Namespace" {
-    value "ee-demo-#{Octopus.Environment.Name | ToLower | Replace '/' '-' | Substring 10}" {}
+    value "ee-demo-#{Octopus.Environment.Name | ToLower | Replace \"\\/\" '-' | Substring 10}" {}
 }
