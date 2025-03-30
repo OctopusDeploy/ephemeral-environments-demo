@@ -4,8 +4,11 @@ name: Create New Release in Octopus
 
 # Controls when the workflow will run
 on:
+  push:
+    branches: ["main"]
+    
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches: ["main"]
        
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
