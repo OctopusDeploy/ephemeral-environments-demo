@@ -1,4 +1,4 @@
-name = "Cleanup Azure resources"
+name = "Cleanup environment"
 default_guided_failure_mode = "EnvironmentDefault"
 description = ""
 
@@ -11,30 +11,20 @@ run_retention_policy {
 }
 
 process {
-    step "run-an-azure-script" {
-        name = "Run an Azure Script"
+    step "run-a-kubectl-script" {
+        name = "Run a kubectl script"
+        properties = {
+            Octopus.Action.TargetRoles = "k8s"
+        }
 
         action {
-            action_type = "Octopus.AzurePowerShell"
+            action_type = "Octopus.KubernetesRunScript"
             properties = {
-                Octopus.Action.Azure.AccountId = "ephemeral-environments-identity"
-                Octopus.Action.Script.ScriptBody = <<-EOT
-                    $envName=$OctopusParameters["Octopus.Environment.Name"]
-                    $resourceGroupName="EEDemo-$envName-rg"
-                    
-                    Write-Host "Deleting resource group: $resourceGroupName"
-                    az group delete --name $resourceGroupName --yes
-                    EOT
+                Octopus.Action.Script.ScriptBody = "kubectl delete namespace $OctopusParameters[\"Kubernetes.Namespace\"]"
                 Octopus.Action.Script.ScriptSource = "Inline"
                 Octopus.Action.Script.Syntax = "PowerShell"
-                OctopusUseBundledTooling = "False"
             }
             worker_pool = "hosted-ubuntu"
-
-            container {
-                feed = "docker-hub"
-                image = "octopusdeploy/worker-tools:6.3.0-ubuntu.22.04"
-            }
         }
     }
 }
