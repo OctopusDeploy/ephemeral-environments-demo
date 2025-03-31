@@ -6,10 +6,10 @@ name: Create New Release in Octopus
 on:
   push:
     branches: ["main"]
-    
+
   pull_request:
     branches: ["main"]
-       
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -18,9 +18,9 @@ permissions:
   contents: write
 
 env:
-  REGISTRY_NAME: ephemeralenvironments
-  REGISTRY: ephemeralenvironments.azurecr.io
-  IMAGE_NAME: ${{ github.repository }}
+  REGISTRY_NAME: teamdevextesting
+  REGISTRY: teamdevextesting.azurecr.io
+  IMAGE_NAME: OctopusDeployTesting/dad-joker-2001
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -58,9 +58,9 @@ jobs:
       - name: "Az CLI login"
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: a46d71e5-dfd4-497b-b269-5ee61b60a36e
+          tenant-id: 3d13e379-e666-469e-ac38-ec6fd61c1166
+          subscription-id: 15ff8e1c-2fbf-487b-aded-87fac73cf027
 
       - name: "Login to Container Registry"
         run: |
@@ -102,21 +102,20 @@ jobs:
             })
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
-      - name: Login to Octopus Deploy 
+      - name: Login to Octopus Deploy
         uses: OctopusDeploy/login@v1
-        with: 
+        with:
           server: https://team-devex-ephemeral-environments.testoctopus.app
           service_account_id: 44d1f23f-66ed-4ad9-babc-9adad7139c56
 
-     # Create a release
+      # Create a release
       - name: Create Octopus Deploy Release
         uses: OctopusDeploy/create-release-action@v3
         with:
-          project: Dad Joker 2000
-          space: Default
+          project: Dad Joker 2001
+          space: Demo
           release_number: ${{ steps.get_version.outputs.version }}
           channel: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && 'Production' || 'Test environments' }}
           git_ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
           git_commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
           package_version: ${{ steps.get_version.outputs.version }}
-      
