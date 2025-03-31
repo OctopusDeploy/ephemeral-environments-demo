@@ -112,7 +112,7 @@ jobs:
       - name: Create Octopus Deploy Release
         uses: OctopusDeploy/create-release-action@v3
         with:
-          project: Dad Joker 2001
+          project: Dad Joker 2000
           space: Demo
           release_number: ${{ steps.get_version.outputs.version }}
           channel: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && 'Production' || 'Test environments' }}
