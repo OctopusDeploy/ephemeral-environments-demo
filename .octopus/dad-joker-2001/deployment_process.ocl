@@ -23,7 +23,7 @@ step "deploy-kubernetes-yaml" {
         packages "ephemeral-environments-demo" {
             acquisition_location = "NotAcquired"
             feed = "teamdevextesting"
-            package_id = "octopusdeploytesting/ephemeral-environments-demo"
+            package_id = "octopusdeploytesting/dad-joker-2001"
             properties = {
                 Extract = "False"
                 Purpose = "DockerImageReference"
