@@ -58,9 +58,9 @@ jobs:
       - name: "Az CLI login"
         uses: azure/login@v1
         with:
-          client-id: a46d71e5-dfd4-497b-b269-5ee61b60a36e
-          tenant-id: 3d13e379-e666-469e-ac38-ec6fd61c1166
-          subscription-id: 15ff8e1c-2fbf-487b-aded-87fac73cf027
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: "Login to Container Registry"
         run: |
