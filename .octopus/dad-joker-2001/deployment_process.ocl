@@ -23,7 +23,7 @@ step "deploy-kubernetes-yaml" {
         packages "ephemeral-environments-demo" {
             acquisition_location = "NotAcquired"
             feed = "teamdevextesting"
-            package_id = "octopusdeploytesting/dad-joker-2001"
+            package_id = "octopusdeploytesting/dad-joker-2000"
             properties = {
                 Extract = "False"
                 Purpose = "DockerImageReference"
@@ -55,7 +55,7 @@ step "get-service-url-and-highlight" {
                     $timeout = $false
                     
                     do {
-                        $externalIp = kubectl get svc dad-joker-2001-service -n #{Kubernetes.Namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+                        $externalIp = kubectl get svc dad-joker-2000-service -n #{Kubernetes.Namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
                         
                         if (-not $externalIp) {
                             $currentTime = Get-Date
