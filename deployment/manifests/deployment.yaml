@@ -17,8 +17,8 @@ spec:
         app: dad-joker-2001
     spec:
       containers:
-        - name: ephemeral-environments-container
-          image: ephemeralenvironments.azurecr.io/octopusdeploytesting/dad-joker-2001:#{Octopus.Action.Package[ephemeral-environments-demo].PackageVersion}
+        - name: dad-joker-2001
+          image: teamdevextesting.azurecr.io/octopusdeploytesting/dad-joker-2001:#{Octopus.Action.Package[ephemeral-environments-demo].PackageVersion}
           ports:
             - containerPort: 3000
           resources:
