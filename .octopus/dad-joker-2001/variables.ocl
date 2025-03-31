@@ -1,3 +1,0 @@
-variable "Kubernetes.Namespace" {
-    value "dad-joker-2000-#{Octopus.Environment.Name | ToLower | Replace \"\\/\" \"-\" | Truncate 45 | Replace \"\\.\\.\\.\" \"\"}" {}
-}
