@@ -8,7 +8,7 @@ step "run-a-script" {
                 $envName=$OctopusParameters["Octopus.Environment.Name"]
                 
                 echo "Hello from the $envName environment!"
-                EOT
+                    EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
