@@ -45,7 +45,7 @@ export default function Index() {
           <p>{data.joke}</p>
           <Form method="post">
             <button
-              className="btn bg-green-600 text-white rounded-md px-4 py-2 hover:bg-green-400 disabled:bg-gray-300 disabled:text-gray-600"
+              className="btn bg-yellow-600 text-white rounded-md px-4 py-2 hover:bg-yellow-400 disabled:bg-gray-300 disabled:text-gray-600"
               type="submit"
               disabled={navigation.state !== "idle"}
             >
