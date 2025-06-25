@@ -104,9 +104,9 @@ step "run-a-script" {
         properties = {
             Octopus.Action.Script.ScriptBody = <<-EOT
                 $namespace = $OctopusParameters["Kubernetes.Namespace"]
-                $applicationUrl = "$namespace.australiaeast.cloudapp.azure.com"
+                $applicationUrl = "http://$namespace.australiaeast.cloudapp.azure.com"
                 
-                Write-Highlight "Application URL: $applicationUrl"
+                Write-Highlight "Application is available at: [$applicationUrl]($applicationUrl)"
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
