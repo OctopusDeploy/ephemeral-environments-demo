@@ -41,9 +41,9 @@ step "get-service-url-and-highlight" {
 
     action {
         action_type = "Octopus.KubernetesRunScript"
+        is_disabled = true
         properties = {
             Octopus.Action.KubernetesContainers.Namespace = "#{Kubernetes.Namespace}"
-            Octopus.Action.RunOnServer = "false"
             Octopus.Action.Script.ScriptBody = <<-EOT
                     # Wait for the LoadBalancer to get an external IP
                     Write-Host "Waiting for LoadBalancer to be assigned an external IP..."
@@ -92,5 +92,26 @@ step "get-service-url-and-highlight" {
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
+        worker_pool = "hosted-windows"
+    }
+}
+
+step "run-a-script" {
+    name = "Run a Script"
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $namespace = $OctopusParameters["Kubernetes.Namespace"]
+                $applicationUrl = "$namespace.australiaeast.cloudapp.azure.com"
+                
+                Write-Highlight "Application URL: $applicationUrl"
+                EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "hosted-ubuntu"
     }
 }
