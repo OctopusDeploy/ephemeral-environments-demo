@@ -96,6 +96,24 @@ step "get-service-url-and-highlight" {
     }
 }
 
+step "show-kubectl-config" {
+    name = "Show kubectl config"
+    properties = {
+        Octopus.Action.TargetRoles = "k8s"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesRunScript"
+        properties = {
+            Octopus.Action.Script.ScriptBody = "kubectl config view"
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "hosted-windows"
+        worker_pool_variable = ""
+    }
+}
+
 step "run-a-script" {
     name = "Run a Script"
 
