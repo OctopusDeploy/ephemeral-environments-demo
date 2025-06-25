@@ -66,8 +66,9 @@ step "add-link-to-application-on-pull-request" {
                 gitHubToken=$(get_octopusvariable "GitHub.PersonalAccessToken")
                 prNumber=$(get_octopusvariable "Octopus.Release.CustomProperties[PullRequestNumber]")
                 pullRequestCommentUrl="https://api.github.com/repos/OctopusDeployTesting/ephemeral-environments-demo/issues/$prNumber/comments"
+                commentBody="Your PR has been deployed to the following test system: [$applicationUrl]($applicationUrl)"
                 
-                echo "Adding comment to pull request $prNumber using URL $pullRequestCommentUrl"
+                echo "Adding comment to pull request $prNumber: $commentBody"
                 
                 curl -L \
                   -X POST \
@@ -75,7 +76,7 @@ step "add-link-to-application-on-pull-request" {
                   -H "Authorization: Bearer $gitHubToken" \
                   -H "X-GitHub-Api-Version: 2022-11-28" \
                   "$pullRequestCommentUrl" \
-                  -d '{"body":"Your PR has been deployed to the following test system: [$applicationUrl]($applicationUrl)"}'
+                  -d '{"body":"$commentBody"}'
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "Bash"
