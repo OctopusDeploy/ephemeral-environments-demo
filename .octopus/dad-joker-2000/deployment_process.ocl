@@ -57,7 +57,7 @@ step "add-link-to-application-on-pull-request" {
     condition = "Variable"
     name = "Add PR comment with application URL"
     properties = {
-        Octopus.Step.ConditionVariableExpression = "#{if Octopus.Release.CustomProperties[PullRequestNumber] != \"\"}true#{/if}"
+        Octopus.Step.ConditionVariableExpression = "#{if Octopus.Release.CustomFields[PullRequestNumber] != \"\"}true#{/if}"
     }
 
     action "add-pr-comment-with-application-url" {
@@ -68,7 +68,7 @@ step "add-link-to-application-on-pull-request" {
                 namespace=$(get_octopusvariable "Kubernetes.Namespace")
                 applicationUrl="http://$namespace.australiaeast.cloudapp.azure.com"
                 gitHubToken=$(get_octopusvariable "GitHub.PersonalAccessToken")
-                prNumber=$(get_octopusvariable "Octopus.Release.CustomProperties[PullRequestNumber]")
+                prNumber=$(get_octopusvariable "Octopus.Release.CustomFields[PullRequestNumber]")
                 pullRequestCommentUrl="https://api.github.com/repos/OctopusDeployTesting/ephemeral-environments-demo/issues/$prNumber/comments"
                 commentBody="Your PR has been deployed to the following test system: [$applicationUrl]($applicationUrl)"
                 commentData="{\"body\":\"$commentBody\"}"
