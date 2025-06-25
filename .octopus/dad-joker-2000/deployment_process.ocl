@@ -65,7 +65,7 @@ step "add-link-to-application-on-pull-request" {
                 applicationUrl="http://$namespace.australiaeast.cloudapp.azure.com"
                 gitHubToken=$(get_octopusvariable "GitHub.PersonalAccessToken")
                 prNumber=$(get_octopusvariable "Octopus.Release.CustomProperties[PullRequestNumber]")
-                pullRequestCommentUrl="https://api.github.com/repos/OctpousDeployTesting/ephemeral-environments-demo/issues/$prNumber/comments"
+                pullRequestCommentUrl="https://api.github.com/repos/OctopusDeployTesting/ephemeral-environments-demo/issues/$prNumber/comments"
                 
                 echo "Adding comment to pull request $prNumber using URL $pullRequestCommentUrl"
                 
