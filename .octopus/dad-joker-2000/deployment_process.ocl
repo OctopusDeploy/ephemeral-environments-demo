@@ -33,91 +33,10 @@ step "deploy-kubernetes-yaml" {
     }
 }
 
-step "get-service-url-and-highlight" {
-    name = "Log application URL"
-    properties = {
-        Octopus.Action.TargetRoles = "k8s"
-    }
-
-    action {
-        action_type = "Octopus.KubernetesRunScript"
-        is_disabled = true
-        properties = {
-            Octopus.Action.KubernetesContainers.Namespace = "#{Kubernetes.Namespace}"
-            Octopus.Action.Script.ScriptBody = <<-EOT
-                    # Wait for the LoadBalancer to get an external IP
-                    Write-Host "Waiting for LoadBalancer to be assigned an external IP..."
-                    $externalIp = $null
-                    
-                    # Set timeout parameters
-                    $maxWaitTimeMinutes = 10
-                    $startTime = Get-Date
-                    $timeout = $false
-                    
-                    do {
-                        $externalIp = kubectl get svc dad-joker-2000-service -n #{Kubernetes.Namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
-                        
-                        if (-not $externalIp) {
-                            $currentTime = Get-Date
-                            $elapsedMinutes = ($currentTime - $startTime).TotalMinutes
-                            
-                            if ($elapsedMinutes -ge $maxWaitTimeMinutes) {
-                                $timeout = $true
-                                break
-                            }
-                            
-                            Write-Host "External IP not yet assigned, waiting 10 seconds... (Elapsed time: $([Math]::Round($elapsedMinutes, 1)) minutes)"
-                            Start-Sleep -Seconds 10
-                        }
-                    } while (-not $externalIp)
-                    
-                    if ($timeout) {
-                        Write-Warning "Timeout reached after $maxWaitTimeMinutes minutes. LoadBalancer IP was not assigned."
-                        Write-Warning "Please check your Kubernetes cluster configuration or service definition."
-                        Write-Highlight "⚠️ LoadBalancer timeout - Service might not be available yet"
-                        
-                        # Return a non-zero exit code to indicate failure (optional)
-                        # Uncomment the following line if you want the deployment step to fail
-                        exit 1
-                    } else {
-                        # Set the URL
-                        $serviceUrl = "http://$externalIp"
-                        Write-Host "External IP assigned: $externalIp"
-                        Write-Host "Application URL: $serviceUrl"
-                        
-                        # Create the highlight with markdown for a clickable link
-                        Write-Highlight "Application is available at: [$serviceUrl]($serviceUrl)"
-                    }
-                EOT
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
-        }
-        worker_pool = "hosted-windows"
-    }
-}
-
-step "show-kubectl-config" {
-    name = "Show kubectl config"
-    properties = {
-        Octopus.Action.TargetRoles = "k8s"
-    }
-
-    action {
-        action_type = "Octopus.KubernetesRunScript"
-        properties = {
-            Octopus.Action.Script.ScriptBody = "kubectl config view"
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
-        }
-        worker_pool = "hosted-windows"
-        worker_pool_variable = ""
-    }
-}
-
 step "run-a-script" {
-    name = "Run a Script"
+    name = "Log application URL"
 
-    action {
+    action "log-application-url" {
         action_type = "Octopus.Script"
         properties = {
             Octopus.Action.Script.ScriptBody = <<-EOT
