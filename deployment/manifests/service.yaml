@@ -4,7 +4,7 @@ metadata:
   name: dad-joker-2000-service
   namespace: "#{Kubernetes.Namespace}"
   annotations:
-    service.beta.kubernetes.io/azure-dns-label-name: "#{Kubernetes.Namespace}.team-devex-testing"
+    service.beta.kubernetes.io/azure-dns-label-name: "#{Kubernetes.Namespace}"
 spec:
   type: LoadBalancer
   selector:
