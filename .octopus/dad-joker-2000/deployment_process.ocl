@@ -61,10 +61,10 @@ step "add-link-to-application-on-pull-request" {
         channels = ["test-environments"]
         properties = {
             Octopus.Action.Script.ScriptBody = <<-EOT
-                namespace = $(get_octopusvariable "Kubernetes.Namespace")
-                applicationUrl = "http://$namespace.australiaeast.cloudapp.azure.com"
-                gitHubToken = $(get_octopusvariable "GitHub.PersonalAccessToken")
-                prNumber = $(get_octopusvariable "Octopus.Release.CustomProperties[PullRequestNumber]")
+                $namespace = $OctopusParameters["Kubernetes.Namespace"]
+                $applicationUrl = "http://$namespace.australiaeast.cloudapp.azure.com"
+                $gitHubToken = $OctopusParameters["GitHub.PersonalAccessToken"]
+                $prNumber = $OctopusParameters["Octopus.Release.CustomProperties[PullRequestNumber]"]
                 
                 curl -L \
                   -X POST \
@@ -75,7 +75,7 @@ step "add-link-to-application-on-pull-request" {
                   -d '{"body":"Your PR has been deployed to the following test system: [$applicationUrl]($applicationUrl)"}'
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "Bash"
+            Octopus.Action.Script.Syntax = "PowerShell"
             OctopusUseBundledTooling = "False"
         }
         worker_pool = "hosted-ubuntu"
