@@ -55,12 +55,12 @@ step "run-a-script" {
 
 step "add-link-to-application-on-pull-request" {
     condition = "Variable"
-    name = "Add link to application on pull request"
+    name = "Add PR comment with application URL"
     properties = {
         Octopus.Step.ConditionVariableExpression = "#{if Octopus.Release.CustomProperties[PullRequestNumber] != \"\"}true#{/if}"
     }
 
-    action {
+    action "add-pr-comment-with-application-url" {
         action_type = "Octopus.Script"
         channels = ["test-environments"]
         properties = {
