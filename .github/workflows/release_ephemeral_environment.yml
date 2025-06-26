@@ -116,7 +116,8 @@ jobs:
           RELEASE_VERSION="${{ steps.get_version.outputs.version }}"
           GIT_REF="${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}"
           GIT_COMMIT="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}"
-          curl -X POST "$OCTOPUS_URL/spaces/$SPACE_ID/api/releases/v1" \
+          echo "$OCTOPUS_URL/api/spaces/$SPACE_ID/api/releases/v1"
+          curl -X POST "$OCTOPUS_URL/api/spaces/$SPACE_ID/api/releases/v1" \
             -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
             -d "{\"ProjectName\":\"Dad Joker 2000\",\"SpaceIdOrName\":\"$SPACE_ID\",\"ChannelName\":\"$CHANNEL_NAME\",\"ReleaseVersion\":\"$RELEASE_VERSION\",\"PackageVersion\":\"$RELEASE_VERSION\",\"GitRef\":\"$GIT_REF\",\"GitCommit\":\"$GIT_COMMIT\"}"
