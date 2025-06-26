@@ -49,7 +49,7 @@ jobs:
         uses: paulhatch/semantic-version@v5.4.0
         with:
           tag_prefix: "v"
-          version_format: "${major}.${minor}.${patch}-${{ steps.branch_names.outputs.branch_name }}.${{ github.run_number }}-${{ github.run_attempt }}"
+          version_format: "${major}.${minor}.${patch}-${{ github.event_name == 'pull_request' && 'pr-' || '' }}${{ github.event_name == 'pull_request' && github.event.pull_request.number || steps.branch_names.outputs.branch_name }}.${{ github.run_number }}-${{ github.run_attempt }}"
 
       - name: Get version
         id: get_version
@@ -107,6 +107,17 @@ jobs:
         with:
           server: https://team-devex-ephemeral-environments.testoctopus.app
           service_account_id: 44d1f23f-66ed-4ad9-babc-9adad7139c56
+
+      # - name: Create Octopus Deploy Release
+      #   uses: OctopusDeploy/create-release-action@v3
+      #   with:
+      #     project: Dad Joker 2000
+      #     space: Demo
+      #     release_number: ${{ steps.get_version.outputs.version }}
+      #     channel: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && 'Production' || 'Test environments' }}
+      #     git_ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
+      #     git_commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+      #     package_version: ${{ steps.get_version.outputs.version }}
 
       # Create a release
       - name: Create Octopus Deploy Release
