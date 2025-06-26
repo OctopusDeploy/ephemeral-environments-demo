@@ -26,7 +26,7 @@ jobs:
 
       - name: Get Space ID for Demo
         run: |
-          SPACE_ID=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/all" | jq -r '.[] | select(.name == "Demo") | .id')
+          SPACE_ID=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/all" | jq -r '.[] | select(.Name == "Demo") | .Id')
           if [ -z "$SPACE_ID" ]; then
             echo "Could not find space named 'Demo'"
             exit 1
@@ -43,7 +43,7 @@ jobs:
           echo "Looking for environment: $ENV_NAME in space $SPACE_ID"
           ENVIRONMENTS=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/$SPACE_ID/environments/v2?skip=0&take=1000000")
           echo "ENVIRONMENTS: $ENVIRONMENTS"
-          ENV_ID=$(echo "$ENVIRONMENTS" | jq -r ".Environments.Items[] | select(.name == \"$ENV_NAME\") | .id")
+          ENV_ID=$(echo "$ENVIRONMENTS" | jq -r ".Environments.Items[] | select(.Name == \"$ENV_NAME\") | .Id")
           if [ -z "$ENV_ID" ]; then
             echo "No matching environment found."
             exit 0
