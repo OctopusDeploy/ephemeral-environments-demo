@@ -41,7 +41,7 @@ jobs:
           set -e
           ENV_NAME="pr-${PR_NUMBER}"
           echo "Looking for environment: $ENV_NAME in space $SPACE_ID"
-          ENVIRONMENTS=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/$SPACE_ID/environments/v2?skip=0&take=1000000")
+          ENVIRONMENTS=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/$SPACE_ID/environments/v2?skip=0&take=1000000&type=Ephemeral")
           echo "ENVIRONMENTS: $ENVIRONMENTS"
           ENV_ID=$(echo "$ENVIRONMENTS" | jq -r ".Environments.Items[] | select(.Name == \"$ENV_NAME\") | .Id")
           if [ -z "$ENV_ID" ]; then
