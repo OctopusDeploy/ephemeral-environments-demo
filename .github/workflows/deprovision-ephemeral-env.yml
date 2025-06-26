@@ -1,0 +1,37 @@
+name: Deprovision Ephemeral Environment
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  deprovision:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up PR number
+        id: pr
+        run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+
+      - name: Login to Octopus Deploy
+        uses: OctopusDeploy/login@v1
+        with:
+          server: https://team-devex-ephemeral-environments.testoctopus.app
+          service_account_id: 44d1f23f-66ed-4ad9-babc-9adad7139c56
+
+      - name: Query Octopus and deprovision environment
+        env:
+          PR_NUMBER: ${{ env.PR_NUMBER }}
+        run: |
+          set -e
+          ENV_NAME="pr-${PR_NUMBER}"
+          echo "Looking for environment: $ENV_NAME"
+          ENVIRONMENTS=$(curl -s -H "X-Octopus-ApiKey: $OCTOPUS_API_KEY" "$OCTOPUS_SERVER/api/environments/v2?skip=0&take=1000000")
+          ENV_ID=$(echo "$ENVIRONMENTS" | jq -r ".Environments.Items[] | select(.name == \"$ENV_NAME\") | .id")
+          if [ -z "$ENV_ID" ]; then
+            echo "No matching environment found."
+            exit 0
+          fi
+          echo "Deprovisioning environment $ENV_NAME with ID $ENV_ID"
+          echo "curl -s -X POST -H \"X-Octopus-ApiKey: $OCTOPUS_API_KEY\" \"$OCTOPUS_SERVER/api/environments/ephemeral/$ENV_ID/deprovision\""
+          echo "Environment $ENV_NAME deprovisioned."
