@@ -31,12 +31,12 @@ jobs:
           set -e
           ENV_NAME="pr-${PR_NUMBER}"
           echo "Looking for environment: $ENV_NAME"
-          ENVIRONMENTS=$(curl -s -H "X-Octopus-ApiKey: $OCTOPUS_API_KEY" "$OCTOPUS_SERVER/api/environments/v2?skip=0&take=1000000")
+          ENVIRONMENTS=$(curl -s -H "X-Octopus-ApiKey: $OCTOPUS_API_KEY" "$OCTOPUS_URL/api/environments/v2?skip=0&take=1000000")
           ENV_ID=$(echo "$ENVIRONMENTS" | jq -r ".Environments.Items[] | select(.name == \"$ENV_NAME\") | .id")
           if [ -z "$ENV_ID" ]; then
             echo "No matching environment found."
             exit 0
           fi
           echo "Deprovisioning environment $ENV_NAME with ID $ENV_ID"
-          echo "curl -s -X POST -H \"X-Octopus-ApiKey: $OCTOPUS_API_KEY\" \"$OCTOPUS_SERVER/api/environments/ephemeral/$ENV_ID/deprovision\""
+          echo "curl -s -X POST -H \"X-Octopus-ApiKey: $OCTOPUS_API_KEY\" \"$OCTOPUS_URL/api/environments/ephemeral/$ENV_ID/deprovision\""
           echo "Environment $ENV_NAME deprovisioned."
