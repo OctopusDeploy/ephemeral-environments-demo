@@ -32,6 +32,7 @@ jobs:
           ENV_NAME="pr-${PR_NUMBER}"
           echo "Looking for environment: $ENV_NAME"
           ENVIRONMENTS=$(curl -s -H "X-Octopus-ApiKey: $OCTOPUS_API_KEY" "$OCTOPUS_URL/api/environments/v2?skip=0&take=1000000")
+          echo "ENVIRONMENTS: $ENVIRONMENTS"
           ENV_ID=$(echo "$ENVIRONMENTS" | jq -r ".Environments.Items[] | select(.name == \"$ENV_NAME\") | .id")
           if [ -z "$ENV_ID" ]; then
             echo "No matching environment found."
