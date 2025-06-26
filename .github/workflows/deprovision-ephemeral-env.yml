@@ -4,7 +4,6 @@ on:
   pull_request:
     types:
       - closed
-      - synchronize
 
 jobs:
   deprovision:
@@ -46,8 +45,8 @@ jobs:
           echo "ENV_ID=$ENV_ID" >> $GITHUB_ENV
           echo "env_id=$ENV_ID" >> $GITHUB_OUTPUT
 
-      - name: Deprovision environment if PR is closed
-        if: github.event.action == 'closed' && steps.get_env_id.outputs.env_id != ''
+      - name: Deprovision environment if exists
+        if: steps.get_env_id.outputs.env_id != ''
         env:
           SPACE_ID: ${{ env.SPACE_ID }}
           ENV_ID: ${{ env.ENV_ID }}
