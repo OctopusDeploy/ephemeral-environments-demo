@@ -24,14 +24,24 @@ jobs:
           server: https://team-devex-ephemeral-environments.testoctopus.app
           service_account_id: 44d1f23f-66ed-4ad9-babc-9adad7139c56
 
+      - name: Get Space ID for Demo
+        run: |
+          SPACE_ID=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/all" | jq -r '.[] | select(.name == "Demo") | .id')
+          if [ -z "$SPACE_ID" ]; then
+            echo "Could not find space named 'Demo'"
+            exit 1
+          fi
+          echo "SPACE_ID=$SPACE_ID" >> $GITHUB_ENV
+
       - name: Query Octopus and deprovision environment
         env:
           PR_NUMBER: ${{ env.PR_NUMBER }}
+          SPACE_ID: ${{ env.SPACE_ID }}
         run: |
           set -e
           ENV_NAME="pr-${PR_NUMBER}"
-          echo "Looking for environment: $ENV_NAME"
-          ENVIRONMENTS=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/environments/v2?skip=0&take=1000000")
+          echo "Looking for environment: $ENV_NAME in space $SPACE_ID"
+          ENVIRONMENTS=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/$SPACE_ID/environments/v2?skip=0&take=1000000")
           echo "ENVIRONMENTS: $ENVIRONMENTS"
           ENV_ID=$(echo "$ENVIRONMENTS" | jq -r ".Environments.Items[] | select(.name == \"$ENV_NAME\") | .id")
           if [ -z "$ENV_ID" ]; then
@@ -39,5 +49,5 @@ jobs:
             exit 0
           fi
           echo "Deprovisioning environment $ENV_NAME with ID $ENV_ID"
-          curl -s -X POST -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/environments/ephemeral/$ENV_ID/deprovision"
+          curl -s -X POST -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/$SPACE_ID/environments/ephemeral/$ENV_ID/deprovision"
           echo "Environment $ENV_NAME deprovisioned."
