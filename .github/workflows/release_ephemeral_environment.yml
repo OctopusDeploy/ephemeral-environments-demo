@@ -111,12 +111,13 @@ jobs:
       # Create a release
       - name: Create Octopus Deploy Release
         run: |
+          SPACE_ID=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/all" | jq -r '.[] | select(.Name=="Demo") | .Id')
           CHANNEL_NAME="${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && 'Production' || 'Test environments' }}"
           RELEASE_VERSION="${{ steps.get_version.outputs.version }}"
           GIT_REF="${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}"
           GIT_COMMIT="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}"
-          curl -X POST "$OCTOPUS_URL/spaces/Demo/api/releases/v1" \
+          curl -X POST "$OCTOPUS_URL/spaces/$SPACE_ID/api/releases/v1" \
             -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\n\"ProjectName\":\"Dad Joker 2000\",\n\"SpaceIdOrName\":\"Demo\",\n\"ChannelName\":\"$CHANNEL_NAME\",\n\"ReleaseVersion\":\"$RELEASE_VERSION\",\n\"PackageVersion\":\"$RELEASE_VERSION\",\n\"GitRef\":\"$GIT_REF\",\n\"GitCommit\":\"$GIT_COMMIT\"\n}"
+            -d "{\"ProjectName\":\"Dad Joker 2000\",\"SpaceIdOrName\":\"$SPACE_ID\",\"ChannelName\":\"$CHANNEL_NAME\",\"ReleaseVersion\":\"$RELEASE_VERSION\",\"PackageVersion\":\"$RELEASE_VERSION\",\"GitRef\":\"$GIT_REF\",\"GitCommit\":\"$GIT_COMMIT\"}"
         shell: bash
