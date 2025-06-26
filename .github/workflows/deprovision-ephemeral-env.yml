@@ -33,21 +33,25 @@ jobs:
           fi
           echo "SPACE_ID=$SPACE_ID" >> $GITHUB_ENV
 
-      - name: Query Octopus and deprovision environment
+      - name: Find Ephemeral Environment for PR
+        id: get_env_id
         env:
           PR_NUMBER: ${{ env.PR_NUMBER }}
           SPACE_ID: ${{ env.SPACE_ID }}
         run: |
-          set -e
           ENV_NAME="pr-${PR_NUMBER}"
           echo "Looking for environment: $ENV_NAME in space $SPACE_ID"
           ENVIRONMENTS=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/$SPACE_ID/environments/v2?skip=0&take=1000000&type=Ephemeral")
-          echo "ENVIRONMENTS: $ENVIRONMENTS"
           ENV_ID=$(echo "$ENVIRONMENTS" | jq -r ".Environments.Items[] | select(.Name == \"$ENV_NAME\") | .Id")
-          if [ -z "$ENV_ID" ]; then
-            echo "No matching environment found."
-            exit 0
-          fi
-          echo "Deprovisioning environment $ENV_NAME with ID $ENV_ID"
-          echo "curl -s -X POST -H \"Authorization: Bearer $OCTOPUS_ACCESS_TOKEN\" \"$OCTOPUS_URL/api/spaces/$SPACE_ID/environments/ephemeral/$ENV_ID/deprovision\""
-          echo "Environment $ENV_NAME deprovisioned."
+          echo "ENV_ID=$ENV_ID" >> $GITHUB_ENV
+          echo "env_id=$ENV_ID" >> $GITHUB_OUTPUT
+
+      - name: Deprovision environment if PR is closed
+        if: github.event.action == 'closed' && steps.get_env_id.outputs.env_id != ''
+        env:
+          SPACE_ID: ${{ env.SPACE_ID }}
+          ENV_ID: ${{ env.ENV_ID }}
+        run: |
+          echo "Deprovisioning environment with ID $ENV_ID in space $SPACE_ID"
+          curl -s -X POST -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/$SPACE_ID/environments/ephemeral/$ENV_ID/deprovision"
+          echo "Environment deprovisioning started"
