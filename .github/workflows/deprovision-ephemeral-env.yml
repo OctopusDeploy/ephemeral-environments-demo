@@ -49,5 +49,5 @@ jobs:
             exit 0
           fi
           echo "Deprovisioning environment $ENV_NAME with ID $ENV_ID"
-          curl -s -X POST -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/$SPACE_ID/environments/ephemeral/$ENV_ID/deprovision"
+          echo "curl -s -X POST -H \"Authorization: Bearer $OCTOPUS_ACCESS_TOKEN\" \"$OCTOPUS_URL/api/spaces/$SPACE_ID/environments/ephemeral/$ENV_ID/deprovision\""
           echo "Environment $ENV_NAME deprovisioned."
