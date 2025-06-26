@@ -1,0 +1,56 @@
+name: Deprovision Ephemeral Environment
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  deprovision:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Set up PR number
+        id: pr
+        run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+
+      - name: Login to Octopus Deploy
+        uses: OctopusDeploy/login@v1
+        with:
+          server: https://team-devex-ephemeral-environments.testoctopus.app
+          service_account_id: 44d1f23f-66ed-4ad9-babc-9adad7139c56
+
+      - name: Get Space ID for Demo
+        run: |
+          SPACE_ID=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/all" | jq -r '.[] | select(.Name == "Demo") | .Id')
+          if [ -z "$SPACE_ID" ]; then
+            echo "Could not find space named 'Demo'"
+            exit 1
+          fi
+          echo "SPACE_ID=$SPACE_ID" >> $GITHUB_ENV
+
+      - name: Find Ephemeral Environment for PR
+        id: get_env_id
+        env:
+          PR_NUMBER: ${{ env.PR_NUMBER }}
+          SPACE_ID: ${{ env.SPACE_ID }}
+        run: |
+          ENV_NAME="pr-${PR_NUMBER}"
+          echo "Looking for environment: $ENV_NAME in space $SPACE_ID"
+          ENVIRONMENTS=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/$SPACE_ID/environments/v2?skip=0&take=1000000&type=Ephemeral")
+          ENV_ID=$(echo "$ENVIRONMENTS" | jq -r ".Environments.Items[] | select(.Name == \"$ENV_NAME\") | .Id")
+          echo "ENV_ID=$ENV_ID" >> $GITHUB_ENV
+          echo "env_id=$ENV_ID" >> $GITHUB_OUTPUT
+
+      - name: Deprovision environment if exists
+        if: steps.get_env_id.outputs.env_id != ''
+        env:
+          SPACE_ID: ${{ env.SPACE_ID }}
+          ENV_ID: ${{ env.ENV_ID }}
+        run: |
+          echo "Deprovisioning environment with ID $ENV_ID in space $SPACE_ID"
+          curl -s -X POST -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/$SPACE_ID/environments/ephemeral/$ENV_ID/deprovision"
+          echo "Environment deprovisioning started"

@@ -70,7 +70,7 @@ step "add-link-to-application-on-pull-request" {
                 gitHubToken=$(get_octopusvariable "GitHub.PersonalAccessToken")
                 prNumber=$(get_octopusvariable "Octopus.Release.CustomFields[PullRequestNumber]")
                 pullRequestCommentUrl="https://api.github.com/repos/OctopusDeployTesting/ephemeral-environments-demo/issues/$prNumber/comments"
-                commentBody="Your PR has been deployed to the following test system: [$applicationUrl]($applicationUrl)"
+                commentBody="Your PR has been deployed to test system: [$applicationUrl]($applicationUrl)"
                 commentData="{\"body\":\"$commentBody\"}"
                 
                 echo "Adding comment to pull request $prNumber: $commentBody"
