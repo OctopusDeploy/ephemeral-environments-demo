@@ -119,4 +119,4 @@ jobs:
           git_commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
           package_version: ${{ steps.get_version.outputs.version }}
           custom_fields: |
-            PullRequestNumber:${{ github.event_name == 'pull_request' && github.event.pull_request.number || '' }}
+            PullRequestNumber: ${{ github.event_name == 'pull_request' && github.event.pull_request.number || '' }}
