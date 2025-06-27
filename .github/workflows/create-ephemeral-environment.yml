@@ -108,29 +108,15 @@ jobs:
           server: https://team-devex-ephemeral-environments.testoctopus.app
           service_account_id: 44d1f23f-66ed-4ad9-babc-9adad7139c56
 
-      # - name: Create Octopus Deploy Release
-      #   uses: OctopusDeploy/create-release-action@v3
-      #   with:
-      #     project: Dad Joker 2000
-      #     space: Demo
-      #     release_number: ${{ steps.get_version.outputs.version }}
-      #     channel: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && 'Production' || 'Test environments' }}
-      #     git_ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
-      #     git_commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
-      #     package_version: ${{ steps.get_version.outputs.version }}
-
-      # Create a release
       - name: Create Octopus Deploy Release
-        run: |
-          SPACE_ID=$(curl -s -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" "$OCTOPUS_URL/api/spaces/all" | jq -r '.[] | select(.Name=="Demo") | .Id')
-          CHANNEL_NAME="${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && 'Production' || 'Test environments' }}"
-          RELEASE_VERSION="${{ steps.get_version.outputs.version }}"
-          GIT_REF="${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}"
-          GIT_COMMIT="${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}"
-          PR_NUMBER="${{ github.event_name == 'pull_request' && github.event.pull_request.number || '' }}"
-          echo "$OCTOPUS_URL/api/spaces/$SPACE_ID/releases/create/v1"
-          curl -X POST "$OCTOPUS_URL/api/spaces/$SPACE_ID/releases/create/v1" \
-            -H "Authorization: Bearer $OCTOPUS_ACCESS_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{\"ProjectName\":\"Dad Joker 2000\",\"SpaceIdOrName\":\"$SPACE_ID\",\"ChannelName\":\"$CHANNEL_NAME\",\"ReleaseVersion\":\"$RELEASE_VERSION\",\"PackageVersion\":\"$RELEASE_VERSION\",\"GitRef\":\"$GIT_REF\",\"GitCommit\":\"$GIT_COMMIT\",\"CustomFields\":{\"PullRequestNumber\":\"$PR_NUMBER\"}}"
-        shell: bash
+        uses: OctopusDeploy/create-release-action@lourens/add-custom-fields
+        with:
+          project: Dad Joker 2000
+          space: Demo
+          release_number: ${{ steps.get_version.outputs.version }}
+          channel: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && 'Production' || 'Test environments' }}
+          git_ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
+          git_commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          package_version: ${{ steps.get_version.outputs.version }}
+          custom_fields: |
+            PullRequestNumber:${{ github.event_name == 'pull_request' && github.event.pull_request.number || '' }}
