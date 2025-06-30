@@ -109,7 +109,7 @@ jobs:
           service_account_id: 44d1f23f-66ed-4ad9-babc-9adad7139c56
 
       - name: Create Octopus Deploy Release
-        uses: OctopusDeploy/create-release-action@lourens/add-custom-fields
+        uses: OctopusDeploy/create-release-action@v3
         with:
           project: Dad Joker 2000
           space: Demo
