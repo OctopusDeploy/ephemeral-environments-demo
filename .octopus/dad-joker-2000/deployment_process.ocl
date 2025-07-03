@@ -62,7 +62,7 @@ step "add-link-to-application-on-pull-request" {
 
     action "add-pr-comment-with-application-url" {
         action_type = "Octopus.Script"
-        channels = ["test-environments"]
+        environments = ["test-environments"]
         properties = {
             Octopus.Action.Script.ScriptBody = <<-EOT
                 namespace=$(get_octopusvariable "Kubernetes.Namespace")
