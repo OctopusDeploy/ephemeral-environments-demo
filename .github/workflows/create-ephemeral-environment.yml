@@ -18,8 +18,8 @@ permissions:
   contents: write
 
 env:
-  REGISTRY_NAME: teamdevextesting
-  REGISTRY: teamdevextesting.azurecr.io
+  REGISTRY_NAME: ${{ secrets.CONTAINER_REGISTRY_NAME }}
+  REGISTRY: ${{ secrets.CONTAINER_REGISTRY_URL }}
   IMAGE_NAME: OctopusDeployTesting/dad-joker-2000
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -105,8 +105,8 @@ jobs:
       - name: Login to Octopus Deploy
         uses: OctopusDeploy/login@v1
         with:
-          server: https://team-devex-ephemeral-environments.testoctopus.app
-          service_account_id: 44d1f23f-66ed-4ad9-babc-9adad7139c56
+          server: ${{ secrets.OCTOPUS_SERVER_URL }}
+          service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
 
       - name: Create test environment release
         if: github.event_name == 'pull_request'

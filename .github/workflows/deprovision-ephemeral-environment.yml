@@ -20,8 +20,8 @@ jobs:
       - name: Login to Octopus Deploy
         uses: OctopusDeploy/login@v1
         with:
-          server: https://team-devex-ephemeral-environments.testoctopus.app
-          service_account_id: 44d1f23f-66ed-4ad9-babc-9adad7139c56
+          server: ${{ secrets.OCTOPUS_SERVER_URL }}
+          service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
 
       - name: Get Space ID for Demo
         run: |
