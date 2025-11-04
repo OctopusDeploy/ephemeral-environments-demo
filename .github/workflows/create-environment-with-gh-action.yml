@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Create New Environment in Octopus
+name: Create Environment with GH Action
 
 # Controls when the workflow will run
 on:
@@ -109,8 +109,8 @@ jobs:
           service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
 
       - name: Create test environment
-        uses: OctopusDeploy/create-ephemeral-environment@47224b88a4040f50ccdeea8946001a9a823344ec
+        uses: OctopusDeploy/create-ephemeral-environment@main # update to @v1 once released
         with:
-          name: ${{ github.event.pull_request.number }}
-          project: "Dad Joker 2000"
+          name: "pr-${{ github.event.pull_request.number }}"
           space: "Demo"
+          project: "Dad Joker 2000"
