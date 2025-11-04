@@ -4,6 +4,7 @@ on:
   pull_request:
     types:
       - closed
+  workflow_dispatch:
 
 jobs:
   deprovision:
@@ -22,6 +23,7 @@ jobs:
       - name: 🐙 Deprovision Ephemeral Environment Action
         uses: OctopusDeploy/deprovision-ephemeral-environment@main # update to @v1 once released
         with:
-          name: "pr-${{ github.event.pull_request.number }}"
+          # Use PR number if it exists, otherwise use branch name
+          name: ${{ github.event.pull_request.number && format('pr-{0}', github.event.pull_request.number) || format('branch-{0}', github.ref_name) }}
           space: "Demo"
           project: "Dad Joker 2000"

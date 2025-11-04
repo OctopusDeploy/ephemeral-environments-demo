@@ -4,12 +4,6 @@ name: Create Environment with GH Action
 
 # Controls when the workflow will run
 on:
-  push:
-    branches: ["main"]
-
-  pull_request:
-    branches: ["main"]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -40,20 +34,16 @@ jobs:
           tag_prefix: "v"
           version_format: "${major}.${minor}.${patch}"
 
-      - name: Get branch names
-        id: branch_names
-        uses: OctopusDeploy/util-actions/current-branch-name@current-branch-name.0.1.0
-
       - name: Get pre-release version
         id: get_pre_release_version
         uses: paulhatch/semantic-version@v5.4.0
         with:
           tag_prefix: "v"
-          version_format: "${major}.${minor}.${patch}-${{ github.event_name == 'pull_request' && 'pr-' || '' }}${{ github.event_name == 'pull_request' && github.event.pull_request.number || steps.branch_names.outputs.branch_name }}.${{ github.run_number }}-${{ github.run_attempt }}"
+          version_format: "${major}.${minor}.${patch}-${{ github.ref_name }}.${{ github.run_number }}-${{ github.run_attempt }}"
 
       - name: Get version
         id: get_version
-        run: echo "version=${{ github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.get_release_version.outputs.version || steps.get_pre_release_version.outputs.version }}" >> $GITHUB_OUTPUT
+        run: echo "version=${{ steps.get_pre_release_version.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: "Az CLI login"
         uses: azure/login@v1
@@ -90,18 +80,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Tag repo on main branch
-        uses: actions/github-script@v6.3.3
-        with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/v${{ steps.get_release_version.outputs.version }}',
-              sha: context.sha
-            })
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
       - name: Login to Octopus Deploy
         uses: OctopusDeploy/login@v1
         with:
@@ -111,6 +89,6 @@ jobs:
       - name: Create test environment
         uses: OctopusDeploy/create-ephemeral-environment@main # update to @v1 once released
         with:
-          name: "pr-${{ github.event.pull_request.number }}"
+          name: "branch-${{ github.ref_name }}"
           space: "Demo"
           project: "Dad Joker 2000"
