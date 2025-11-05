@@ -127,6 +127,9 @@ jobs:
           git_ref: ${{ github.head_ref }}
           git_commit: ${{ github.event.pull_request.head.sha }}
           package_version: ${{ steps.get_version.outputs.version }}
+          # Remove custom fields here and in portal if we run with this option
+          custom_fields: |
+            PullRequestNumber: ${{ github.event.pull_request.number }}
 
       - name: Deploy the test environment release
         id: deploy_step
