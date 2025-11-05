@@ -130,6 +130,10 @@ jobs:
           custom_fields: |
             PullRequestNumber: ${{ github.event.pull_request.number }}
 
+      - name: Sleep 30 seconds to allow Octopus to process the release
+        if: github.event_name == 'pull_request'
+        run: sleep 30s
+
       - name: Deploy the test environment release
         id: deploy_step
         if: github.event_name == 'pull_request'
@@ -139,8 +143,6 @@ jobs:
           release_number: ${{ steps.get_version.outputs.version }}
           environments: |
             pr-${{ github.event.pull_request.number }}
-          git_ref: ${{ github.ref }}
-          git_commit: ${{ github.sha }}
 
       - name: TEMP PRINT OUTPUT
         if: github.event_name == 'pull_request'
