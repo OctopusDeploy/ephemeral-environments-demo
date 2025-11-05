@@ -21,6 +21,7 @@ env:
   REGISTRY_NAME: ${{ secrets.CONTAINER_REGISTRY_NAME }}
   REGISTRY: ${{ secrets.CONTAINER_REGISTRY_URL }}
   IMAGE_NAME: OctopusDeployTesting/dad-joker-2000
+  OCTOPUS_SPACE : Demo
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -113,7 +114,6 @@ jobs:
         uses: OctopusDeploy/create-ephemeral-environment@main # update to @v1 once released
         with:
           name: pr-${{ github.event.pull_request.number }}
-          space: Demo
           project: Dad Joker 2000
           
       - name: Create test environment release
@@ -121,7 +121,6 @@ jobs:
         uses: OctopusDeploy/create-release-action@v3
         with:
           project: Dad Joker 2000
-          space: Demo
           release_number: ${{ steps.get_version.outputs.version }}
           channel: Test environments
           git_ref: ${{ github.head_ref }}
@@ -160,7 +159,6 @@ jobs:
         uses: OctopusDeploy/create-release-action@v3
         with:
           project: Dad Joker 2000
-          space: Demo
           release_number: ${{ steps.get_version.outputs.version }}
           channel: Production
           git_ref: ${{ github.ref }}
