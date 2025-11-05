@@ -92,3 +92,7 @@ jobs:
           name: "branch-${{ github.ref_name }}"
           space: "Demo"
           project: "Dad Joker 2000"
+
+          # release (change channel in portal first)
+          # deploy
+          # await_task # output message 

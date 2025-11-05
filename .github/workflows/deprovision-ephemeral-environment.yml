@@ -23,7 +23,6 @@ jobs:
       - name: 🐙 Deprovision Ephemeral Environment Action
         uses: OctopusDeploy/deprovision-ephemeral-environment@main # update to @v1 once released
         with:
-          # Use PR number if it exists, otherwise use branch name
-          name: ${{ github.event.pull_request.number && format('pr-{0}', github.event.pull_request.number) || format('branch-{0}', github.ref_name) }}
-          space: "Demo"
-          project: "Dad Joker 2000"
+          name: pr-${{ github.event.pull_request.number }}
+          space: Demo
+          project: Dad Joker 2000
