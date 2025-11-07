@@ -138,7 +138,7 @@ jobs:
           project: Dad Joker 2000
           release_number: ${{ steps.get_version.outputs.version }}
           environments: |
-            pr-${{ github.event.pull_request.number }}
+            Development
 
       - name: TEMP PRINT OUTPUT
         if: github.event_name == 'pull_request'
