@@ -122,7 +122,7 @@ jobs:
         with:
           project: Dad Joker 2000
           release_number: ${{ steps.get_version.outputs.version }}
-          channel: Development
+          channel: Test environments
           git_ref: ${{ github.head_ref }}
           git_commit: ${{ github.event.pull_request.head.sha }}
           package_version: ${{ steps.get_version.outputs.version }}
@@ -138,7 +138,7 @@ jobs:
           project: Dad Joker 2000
           release_number: ${{ steps.get_version.outputs.version }}
           environments: |
-            Development
+            pr-${{ github.event.pull_request.number }}
 
       - name: TEMP PRINT OUTPUT
         if: github.event_name == 'pull_request'
