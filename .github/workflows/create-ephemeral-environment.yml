@@ -145,7 +145,7 @@ jobs:
         uses: OctopusDeploy/await-task-action@v3
         with:
           server_task_id: ${{ fromJSON(steps.deploy_step.outputs.server_tasks)[0].serverTaskId }}
-          poll_interval: 0.5s
+          poll_interval: 2s
 
       - name: Create production release
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
