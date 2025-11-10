@@ -109,12 +109,12 @@ jobs:
           server: ${{ secrets.OCTOPUS_SERVER_URL }}
           service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
 
-      # - name: Create test environment
-      #   if: github.event_name == 'pull_request'
-      #   uses: OctopusDeploy/create-ephemeral-environment@main # update to @v1 once released
-      #   with:
-      #     name: pr-${{ github.event.pull_request.number }}
-      #     project: Dad Joker 2000
+      - name: Create test environment
+        if: github.event_name == 'pull_request'
+        uses: OctopusDeploy/create-ephemeral-environment@main # update to @v1 once released
+        with:
+          name: pr-${{ github.event.pull_request.number }}
+          project: Dad Joker 2000
           
       - name: Create test environment release
         if: github.event_name == 'pull_request'
@@ -122,7 +122,7 @@ jobs:
         with:
           project: Dad Joker 2000
           release_number: ${{ steps.get_version.outputs.version }}
-          channel: Development
+          channel: Test environments
           git_ref: ${{ github.head_ref }}
           git_commit: ${{ github.event.pull_request.head.sha }}
           package_version: ${{ steps.get_version.outputs.version }}
@@ -138,7 +138,7 @@ jobs:
           project: Dad Joker 2000
           release_number: ${{ steps.get_version.outputs.version }}
           environments: |
-            Development
+            pr-${{ github.event.pull_request.number }}
 
       - name: Wait for deployment to complete
         if: github.event_name == 'pull_request'
