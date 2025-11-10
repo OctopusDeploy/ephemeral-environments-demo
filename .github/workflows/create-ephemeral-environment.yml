@@ -140,16 +140,11 @@ jobs:
           environments: |
             pr-${{ github.event.pull_request.number }}
 
-      - name: TEMP PRINT OUTPUT
-        if: github.event_name == 'pull_request'
-        run: |
-          echo "Server Task ID: ${{ steps.deploy_step.outputs.server_task_id }}"
-
       - name: Wait for deployment to complete
         if: github.event_name == 'pull_request'
         uses: OctopusDeploy/await-task-action@v3
         with:
-          server_task_id: ${{ steps.deploy_step.outputs.server_task_id }}
+          server_task_id: ${{ fromJSON(steps.deploy_step.outputs.server_tasks)[0].serverTaskId }}
           poll_interval: 0.5s
 
       - name: Create production release
