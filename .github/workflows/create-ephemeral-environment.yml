@@ -111,7 +111,7 @@ jobs:
 
       - name: Create test environment
         if: github.event_name == 'pull_request'
-        uses: OctopusDeploy/create-ephemeral-environment@v1
+        uses: OctopusDeploy/create-ephemeral-environment@v1.0.0
         with:
           name: pr-${{ github.event.pull_request.number }}
           project: Dad Joker 2000
