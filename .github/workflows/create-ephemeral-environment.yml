@@ -41,16 +41,12 @@ jobs:
           tag_prefix: "v"
           version_format: "${major}.${minor}.${patch}"
 
-      - name: Get branch names
-        id: branch_names
-        uses: OctopusDeploy/util-actions/current-branch-name@current-branch-name.0.1.0
-
       - name: Get pre-release version
         id: get_pre_release_version
         uses: paulhatch/semantic-version@v5.4.0
         with:
           tag_prefix: "v"
-          version_format: "${major}.${minor}.${patch}-${{ github.event_name == 'pull_request' && 'pr-' || '' }}${{ github.event_name == 'pull_request' && github.event.pull_request.number || steps.branch_names.outputs.branch_name }}.${{ github.run_number }}-${{ github.run_attempt }}"
+          version_format: "${major}.${minor}.${patch}-${{ github.event_name == 'pull_request' && 'pr-' || '' }}${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.head_ref }}.${{ github.run_number }}-${{ github.run_attempt }}"
 
       - name: Get version
         id: get_version
