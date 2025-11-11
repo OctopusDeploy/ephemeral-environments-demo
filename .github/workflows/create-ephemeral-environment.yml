@@ -21,7 +21,7 @@ env:
   REGISTRY_NAME: ${{ secrets.CONTAINER_REGISTRY_NAME }}
   REGISTRY: ${{ secrets.CONTAINER_REGISTRY_URL }}
   IMAGE_NAME: OctopusDeployTesting/dad-joker-2000
-  OCTOPUS_SPACE : Demo
+  OCTOPUS_SPACE: Demo
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -115,7 +115,7 @@ jobs:
         with:
           name: pr-${{ github.event.pull_request.number }}
           project: Dad Joker 2000
-          
+
       - name: Create test environment release
         if: github.event_name == 'pull_request'
         uses: OctopusDeploy/create-release-action@v3
