@@ -24,4 +24,4 @@ jobs:
         with:
           name: pr-${{ github.event.pull_request.number }}
           space: Demo
-          project: Dad Joker 2000
+          all_projects: true
