@@ -39,13 +39,13 @@ export default function Index() {
         <div className="flex flex-col items-center gap-8">
           <header>
             <h1 className="leading text-4xl font-bold text-gray-800 dark:text-gray-100">
-              Welcome to <span className="text-lavender-600">The Dad Joker 2000!</span>
+              Welcome to <span className="text-purple-600">The Dad Joker 2000!</span>
             </h1>
           </header>
           <p>{data.joke}</p>
           <Form method="post">
             <button
-              className="btn bg-lavender-600 text-white rounded-md px-4 py-2 hover:bg-lavender-400 disabled:bg-gray-300 disabled:text-gray-600"
+              className="btn bg-purple-600 text-white rounded-md px-4 py-2 hover:bg-purple-400 disabled:bg-gray-300 disabled:text-gray-600"
               type="submit"
               disabled={navigation.state !== "idle"}
             >
