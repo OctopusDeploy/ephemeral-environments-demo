@@ -96,7 +96,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: Login to Octopus Deploy
-        uses: OctopusDeploy/login@v1
+        uses: OctopusDeploy/login@49a130b6347c5403a4771ee2ed13476ab61a2c2b
         with:
           server: ${{ secrets.OCTOPUS_SERVER_URL }}
           service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
@@ -141,7 +141,7 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
       - name: Login to Octopus Deploy
-        uses: OctopusDeploy/login@v1
+        uses: OctopusDeploy/login@49a130b6347c5403a4771ee2ed13476ab61a2c2b
         with:
           server: ${{ secrets.OCTOPUS_SERVER_URL }}
           service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
