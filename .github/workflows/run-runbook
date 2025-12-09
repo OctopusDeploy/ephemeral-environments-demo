@@ -1,0 +1,36 @@
+name: Run Runbook
+
+on:
+  push:
+    branches: ["main"]
+
+  pull_request:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  run_runbook:
+    name: Run a Runbook
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Octopus Deploy
+        uses: OctopusDeploy/login@v1
+        with:
+          server: ${{ secrets.OCTOPUS_SERVER_URL }}
+          service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
+
+      - name: Run a runbook in Octopus Deploy 🐙
+        uses: OctopusDeploy/run-runbook-action@v3
+        env:
+          OCTOPUS_SPACE: 'Demo'
+        with:
+          project: 'Test Run Runbook Action'
+          runbook: 'Test Run'
+          environments: |
+            'Development'
