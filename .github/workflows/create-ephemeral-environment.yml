@@ -108,7 +108,4 @@ jobs:
         with:
           project: 'Test Run Runbook Action'
           runbook: 'Test Run'
-          environments: 'Development'
-            'Development'
-
-      
+          environments: 'Development'      
