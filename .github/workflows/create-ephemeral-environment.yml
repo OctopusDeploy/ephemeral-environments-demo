@@ -101,6 +101,16 @@ jobs:
           server: ${{ secrets.OCTOPUS_SERVER_URL }}
           service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
 
+      - name: Run a runbook in Octopus Deploy 🐙
+        uses: OctopusDeploy/run-runbook-action@v3
+        env:
+          OCTOPUS_SPACE: 'Demo'
+        with:
+          project: 'Test Run Runbook Action'
+          runbook: 'Test Run'
+          environments: |
+            'Development'
+
       - name: Create test environment
         uses: OctopusDeploy/create-ephemeral-environment@v1.0.0
         with:
