@@ -147,7 +147,7 @@ jobs:
           service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
 
       - name: Create production release
-        uses: OctopusDeploy/create-release-action@v3
+        uses: OctopusDeploy/create-release-action@342cbb405f3410e116524e196b788275079d6e4f
         with:
           project: Dad Joker 2000
           release_number: ${{ needs.build.outputs.version }}
