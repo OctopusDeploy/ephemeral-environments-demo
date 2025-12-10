@@ -52,12 +52,6 @@ jobs:
             node_modules/**
             **/__tests__/**
       
-      - name: Test extract-package-details
-        id: extract_package
-        uses: OctopusDeploy/util-actions/extract-package-details@cat/125029/update-to-node-24
-        with:
-          path: .  # Or path to a directory containing package.json in your repo
-      
       - name: Test find-and-replace-all (string)
         id: find_replace_string
         uses: OctopusDeploy/util-actions/find-and-replace-all@cat/125029/update-to-node-24
@@ -74,3 +68,9 @@ jobs:
           searchRegex: the
           searchRegexFlags: i
           replace: hooray
+
+      - name: Test extract-package-details
+        id: extract_package
+        uses: OctopusDeploy/util-actions/extract-package-details@cat/125029/update-to-node-24
+        with:
+          path: ./app/package.json
