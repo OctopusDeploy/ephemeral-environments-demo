@@ -102,7 +102,7 @@ jobs:
           service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
 
       - name: Run a runbook in Octopus Deploy 🐙
-        uses: OctopusDeploy/run-runbook-action@v3
+        uses: OctopusDeploy/run-runbook-action@caf3c3577a428be7faf3b8459e954a88e0af2e39
         env:
           OCTOPUS_SPACE: 'Demo'
         with:
