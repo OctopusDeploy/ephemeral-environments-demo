@@ -51,6 +51,20 @@ jobs:
           ignore: |
             node_modules/**
             **/__tests__/**
+
+      - name: Test add-changeset
+        id: add_changeset
+        uses: OctopusDeploy/util-actions/add-changeset@cat/125029/update-to-node-24
+        with:
+          type: patch
+          summary: Test changeset for manual testing
+          ignore: |
+            node_modules/**
+            **/__tests__/**
+      - name: Print add-changeset outputs
+        run: |
+          echo "Changeset Name: ${{ steps.add_changeset.outputs.changesetName }}"
+          echo "Changeset Path: ${{ steps.add_changeset.outputs.changesetPath }}"
       
       - name: Test find-and-replace-all (string)
         id: find_replace_string
@@ -58,8 +72,11 @@ jobs:
         with:
           source: The quick brown fox jumps over the lazy dog
           searchString: the
-          replace: hoorooy
-      
+          replace: hooray
+      - name: Print find-and-replace-all (string) output
+        run: | 
+          echo "Result: ${{ steps.find_replace_string.outputs.value }}"
+        
       - name: Test find-and-replace-all (regex)
         id: find_replace_regex
         uses: OctopusDeploy/util-actions/find-and-replace-all@cat/125029/update-to-node-24
@@ -68,9 +85,16 @@ jobs:
           searchRegex: the
           searchRegexFlags: i
           replace: hooray
+      - name: Print find-and-replace-all (regex) output
+        run: |
+          echo "Result: ${{ steps.find_replace_regex.outputs.value }}"
 
       - name: Test extract-package-details
         id: extract_package
         uses: OctopusDeploy/util-actions/extract-package-details@cat/125029/update-to-node-24
         with:
-          path: ./app/package.json
+          path: ./app/  # Or path to a directory containing package.json in your repo
+      - name: Print extract-package-details outputs
+        run: |
+          echo "Package Name: ${{ steps.extract_package.outputs.name }}"
+          echo "Package Version: ${{ steps.extract_package.outputs.version }}"
