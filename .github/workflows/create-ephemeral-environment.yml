@@ -133,36 +133,4 @@ jobs:
         with:
           server_task_id: ${{ fromJSON(steps.deploy_step.outputs.server_tasks)[0].serverTaskId }}
           polling_interval: 2s
-
-  production:
-    name: Create production release and tag repo
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    steps:
-      - name: Login to Octopus Deploy
-        uses: OctopusDeploy/login@v1
-        with:
-          server: ${{ secrets.OCTOPUS_SERVER_URL }}
-          service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
-
-      - name: Create production release
-        uses: OctopusDeploy/create-release-action@v3
-        with:
-          project: Dad Joker 2000
-          release_number: ${{ needs.build.outputs.version }}
-          channel: Production
-          git_ref: ${{ github.ref }}
-          git_commit: ${{ github.sha }}
-          package_version: ${{ needs.build.outputs.version }}
-
-      - name: Tag repo on main branch
-        uses: actions/github-script@v6.3.3
-        with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/v${{ needs.build.outputs.version }}',
-              sha: context.sha
-            })
+          
