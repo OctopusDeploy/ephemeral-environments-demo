@@ -38,3 +38,4 @@ jobs:
         with:
           packages: 'hello-world'
           version: '1.0.0'
+          overwrite_mode: 'OverwriteExisting'
