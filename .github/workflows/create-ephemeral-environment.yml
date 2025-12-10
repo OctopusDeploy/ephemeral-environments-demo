@@ -42,6 +42,9 @@ jobs:
       - name: test Get branch names
         id: branch_names
         uses: OctopusDeploy/util-actions/current-branch-name@cat/125029/update-to-node-24
+      - name: Print branch names output
+        run: |
+          echo "Branch Name: ${{ steps.branch_names.outputs.branch_name }}"
       
       - name: Test add-changeset
         uses: OctopusDeploy/util-actions/add-changeset@cat/125029/update-to-node-24
