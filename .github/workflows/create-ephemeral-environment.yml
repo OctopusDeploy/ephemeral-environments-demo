@@ -34,7 +34,7 @@ jobs:
 
       - uses: actions/checkout@v6
       - name: Push build information to Octopus Deploy 🐙
-        uses: OctopusDeploy/push-build-information-action@b6773642dd714fd2e57e1cddb2134f303b9d3165
+        uses: OctopusDeploy/push-build-information-action@b330175554fc0e1547bd7371ae37e2dddf5905e5
         with:
           packages: 'hello-world'
           version: '1.0.0'
