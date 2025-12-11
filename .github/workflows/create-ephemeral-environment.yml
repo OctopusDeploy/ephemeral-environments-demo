@@ -33,7 +33,7 @@ jobs:
           service_account_id: ${{ secrets.OCTOPUS_SERVICE_ACCOUNT_ID }}
 
       - name: Install Octopus CLI 🐙
-        uses: OctopusDeploy/install-octopus-cli-action@ed531140ba8437a5ce5992c6f79ff45a02e37397
+        uses: OctopusDeploy/install-octopus-cli-action@0340291411457e779fd51e65b1fd804c5dccb3b9
         with:
           version: '*'
           
