@@ -57,7 +57,7 @@ jobs:
 
       - name: Test add-changeset
         id: add_changeset
-        uses: OctopusDeploy/util-actions/add-changeset@cat/125029/update-to-node-24
+        uses: OctopusDeploy/util-actions/add-changeset@cat/125029/backtrack-before-pnpm-change
         with:
           type: patch
           summary: Test changeset for manual testing
