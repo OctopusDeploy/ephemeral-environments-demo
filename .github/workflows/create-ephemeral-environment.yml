@@ -77,7 +77,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: type=raw,value=${{ steps.get_version.outputs.version }}
         env:
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index,manifest-descriptor,index-descriptor
 
       # Build and push Docker image with Buildx
       - name: Build and push Docker image
