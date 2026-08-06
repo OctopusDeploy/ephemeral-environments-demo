@@ -4,6 +4,9 @@ export default {
   content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      colors: {
+        brand: "#0d80d8",
+      },
       fontFamily: {
         sans: [
           '"Inter"',
