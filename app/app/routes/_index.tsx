@@ -1,5 +1,6 @@
 import { json, type MetaFunction } from "@remix-run/node";
 import { Form, useLoaderData, useNavigation } from "@remix-run/react";
+import { OctopusLogo } from "~/components/OctopusLogo";
 
 export const meta: MetaFunction = () => {
   return [
@@ -35,17 +36,18 @@ export default function Index() {
 
   return (
     <div className="container mx-auto px-4">
-      <div className="flex h-screen items-center justify-center">
-        <div className="flex flex-col items-center gap-8">
+      <div className="flex min-h-screen flex-col items-center">
+        <OctopusLogo className="mt-10 h-16 w-auto" />
+        <div className="flex flex-1 flex-col items-center justify-center gap-8">
           <header>
             <h1 className="leading text-4xl font-bold text-gray-800 dark:text-gray-100">
-              Welcome to <span className="text-green-600">The Dad Joker 2000!</span>
+              Welcome to <span className="text-octopus">The Dad Joker 2000!</span>
             </h1>
           </header>
           <p>{data.joke}</p>
           <Form method="post">
             <button
-              className="btn bg-green-600 text-white rounded-md px-4 py-2 hover:bg-green-400 disabled:bg-gray-300 disabled:text-gray-600"
+              className="btn bg-octopus text-white rounded-md px-4 py-2 hover:bg-octopus-dark disabled:bg-gray-300 disabled:text-gray-600"
               type="submit"
               disabled={navigation.state !== "idle"}
             >

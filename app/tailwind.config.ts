@@ -4,6 +4,12 @@ export default {
   content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      colors: {
+        octopus: {
+          DEFAULT: "#0d80d8",
+          dark: "#0a66ac",
+        },
+      },
       fontFamily: {
         sans: [
           '"Inter"',
