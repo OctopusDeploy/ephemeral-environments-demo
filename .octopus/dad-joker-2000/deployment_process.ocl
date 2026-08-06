@@ -43,7 +43,7 @@ step "run-a-script" {
                 $namespace = $OctopusParameters["Kubernetes.Namespace"]
                 $applicationUrl = "http://$namespace.australiaeast.cloudapp.azure.com"
                 
-                Set-EnvironmentUrl -Key "App" -Value "$applicationUrl" 
+                Set-EnvironmentUrl "App" "$applicationUrl" 
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
