@@ -15,9 +15,9 @@ step "deploy-kubernetes-yaml" {
             Octopus.Action.Kubernetes.ServerSideApply.ForceConflicts = "True"
             Octopus.Action.KubernetesContainers.CustomResourceYamlFileName = "deployment/manifests/*"
             Octopus.Action.KubernetesContainers.Namespace = "#{Kubernetes.Namespace}"
-            Octopus.Action.RunOnServer = "false"
             Octopus.Action.Script.ScriptSource = "GitRepository"
         }
+        worker_pool = "hosted-windows"
         worker_pool_variable = ""
 
         packages "ephemeral-environments-demo" {
@@ -34,7 +34,7 @@ step "deploy-kubernetes-yaml" {
 }
 
 step "run-a-script" {
-    name = "Log application URL"
+    name = "Set application URL"
 
     action "log-application-url" {
         action_type = "Octopus.Script"
@@ -43,7 +43,7 @@ step "run-a-script" {
                 $namespace = $OctopusParameters["Kubernetes.Namespace"]
                 $applicationUrl = "http://$namespace.australiaeast.cloudapp.azure.com"
                 
-                Write-Highlight "Application is available at: [$applicationUrl]($applicationUrl)"
+                Set-EnvironmentUrl "App" "$applicationUrl" 
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
@@ -63,6 +63,7 @@ step "add-link-to-application-on-pull-request" {
     action "add-pr-comment-with-application-url" {
         action_type = "Octopus.Script"
         environments = ["test-environments"]
+        is_disabled = true
         properties = {
             Octopus.Action.Script.ScriptBody = <<-EOT
                 namespace=$(get_octopusvariable "Kubernetes.Namespace")
