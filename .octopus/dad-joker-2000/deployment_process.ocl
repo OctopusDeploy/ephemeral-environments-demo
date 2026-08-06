@@ -43,7 +43,7 @@ step "run-a-script" {
                 $namespace = $OctopusParameters["Kubernetes.Namespace"]
                 $applicationUrl = "http://$namespace.australiaeast.cloudapp.azure.com"
                 
-                Write-Highlight "Application is available at: [$applicationUrl]($applicationUrl)"
+                Set-EnvironmentUrl "App" "$applicationUrl"
                 EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
@@ -63,6 +63,7 @@ step "add-link-to-application-on-pull-request" {
     action "add-pr-comment-with-application-url" {
         action_type = "Octopus.Script"
         environments = ["test-environments"]
+        is_disabled = true
         properties = {
             Octopus.Action.Script.ScriptBody = <<-EOT
                 namespace=$(get_octopusvariable "Kubernetes.Namespace")
